@@ -1,0 +1,3 @@
+import 'dotenv/config';import express from 'express';import cors from 'cors';import mongoose from 'mongoose';import contact from './routes/contact.js';
+const app=express(),PORT=process.env.PORT||5000;app.use(cors({origin:process.env.CLIENT_URL||'http://localhost:5173'}));app.use(express.json());app.get('/api/health',(_q,s)=>s.json({ok:true}));app.use('/api/contact',contact);
+(async()=>{try{if(process.env.MONGO_URI)await mongoose.connect(process.env.MONGO_URI);app.listen(PORT,()=>console.log(`API: http://localhost:${PORT}`))}catch(e){console.error(e.message);app.listen(PORT,()=>console.log(`API: http://localhost:${PORT} (MongoDB unavailable)`))}})();

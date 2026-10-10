@@ -1,0 +1,9 @@
+import React,{useRef} from 'react';
+import {Canvas,useFrame} from '@react-three/fiber';
+import {Environment,Float,MeshTransmissionMaterial,OrbitControls,Stars,ContactShadows} from '@react-three/drei';
+import * as THREE from 'three';
+
+function Core(){const g=useRef(); const ring=useRef(); useFrame((s,d)=>{g.current.rotation.x+=d*.12;g.current.rotation.y+=d*.2;ring.current.rotation.z-=d*.18;});return <group ref={g}><mesh><torusGeometry args={[1.35,.16,32,96]}/><meshStandardMaterial color="#ff6a00" emissive="#ff4d00" emissiveIntensity={4}/></mesh><mesh ref={ring} rotation={[Math.PI/2,0,0]}><torusGeometry args={[1.7,.035,16,96]}/><meshBasicMaterial color="#ff9b45"/></mesh><mesh rotation={[Math.PI/2,0,0]}><torusGeometry args={[.78,.055,16,64]}/><meshBasicMaterial color="#ff6a00"/></mesh><mesh scale={.52}><icosahedronGeometry args={[1.45,2]}/><MeshTransmissionMaterial transmission={1} roughness={.15} thickness={.4} chromaticAberration={.08} color="#ff7a18" emissive="#351200"/></mesh></group>}
+function Monoliths(){return <group position={[0,-1.7,-.2]}>{[-3.8,-2.3,2.4,3.8].map((x,i)=><mesh key={i} position={[x,0,0]} rotation={[0,i%2?.08:-.08,0]}><boxGeometry args={[.55+(.5*i%2),3.2+i*.45,.8]}/><meshStandardMaterial color="#16191b" roughness={.8} metalness={.55}/></mesh>)}</group>}
+function Scene(){return <Canvas camera={{position:[0,.3,6],fov:45}} dpr={[1,2]} gl={{antialias:true,alpha:true}}><ambientLight intensity={.35}/><pointLight position={[3,3,3]} color="#ff6a00" intensity={20}/><pointLight position={[-4,1,2]} color="#ffad73" intensity={8}/><Float speed={1.4} rotationIntensity={.25} floatIntensity={.5}><Core/></Float><Monoliths/><Stars radius={8} depth={5} count={350} factor={1.5} saturation={0} fade speed={.5}/><ContactShadows position={[0,-2,0]} opacity={.45} scale={8} blur={2}/><Environment preset="city"/></Canvas>}
+export default Scene;

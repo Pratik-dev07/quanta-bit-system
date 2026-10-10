@@ -1,0 +1,2 @@
+import express from 'express'; import Contact from '../models/Contact.js'; const r=express.Router();
+r.post('/',async(req,res)=>{try{const{name,email,company,message}=req.body;if(!name||!email||!message)return res.status(400).json({message:'Required fields missing'});const x=await Contact.create({name,email,company,message});res.status(201).json({message:'Enquiry received',id:x._id})}catch(e){res.status(500).json({message:'Could not save enquiry'})}});r.get('/',async(_q,s)=>s.json(await Contact.find().sort({createdAt:-1}).limit(100)));export default r;
